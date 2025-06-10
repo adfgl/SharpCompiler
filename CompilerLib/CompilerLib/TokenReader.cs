@@ -91,6 +91,12 @@ namespace CompilerLib
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool ValidIdentifierChar(char ch)
+        {
+            return IsDigit(ch) || IsLetter(ch) || ch == '_';
+        }
+
         Token Next()
         {
             SkipWhiteSpaces();
@@ -101,13 +107,9 @@ namespace CompilerLib
                 return Number();
             }
 
-            if (ch == '_')
+            if (ch == '_' && ValidIdentifierChar(Peek(1)))
             {
-                char peek = Peek(1);
-                if (IsDigit(peek) || IsLetter(peek) || peek == '_')
-                {
-                    return IdentifierOrKeyword();
-                }
+                return IdentifierOrKeyword();
             }
 
             ETokenType type;
@@ -239,8 +241,7 @@ namespace CompilerLib
             m_buffer.Reset();
             while (true)
             {
-                char ch = Peek();
-                if (IsLetter(ch) || IsDigit(ch) || ch == '_')
+                if (ValidIdentifierChar(Peek()))
                 {
                     m_buffer.Push(Consume());
                 }
