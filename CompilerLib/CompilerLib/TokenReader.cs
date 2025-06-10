@@ -67,8 +67,18 @@ namespace CompilerLib
 
         public Token Read() => s_prevToken = Next();
 
+        void SkipWhiteSpaces()
+        {
+            while (IsWhiteSpace(Peek()))
+            {
+                Consume();
+            }
+        }
+
         Token Next()
         {
+            SkipWhiteSpaces();
+
             char ch = Peek();
             if (IsDigit(ch))
             {

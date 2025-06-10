@@ -18,7 +18,7 @@ namespace CompilerTests
         public void Integer_DetectedCorrectly()
         {
             int integer = 123;
-            string source = $"{integer}";
+            string source = $" {integer} ";
 
             List<Token> tokens = new TokenReader(source).ReadAll();
             Assert.Equal(2, tokens.Count);
