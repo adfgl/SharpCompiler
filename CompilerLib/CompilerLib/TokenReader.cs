@@ -41,9 +41,9 @@ namespace CompilerLib
             return _source[_current++];
         }
 
-        char Peek()
+        char Peek(int offset = 0)
         {
-            int pos = _current;
+            int pos = _current + offset;
             if (pos >= _length)
             {
                 return NO_CHAR;
@@ -53,13 +53,17 @@ namespace CompilerLib
 
         Token s_prevToken = new Token(ETokenType.Undefined, String.Empty);
 
-        public List<Token> ReadAll()
+        public List<Token> ReadAll(bool ignoreLineBreaks = false)
         {
             List<Token> tokens = new List<Token>();
             Token token;
             do
             {
                 token = Next();
+                if (token.type == ETokenType.LineBreak && ignoreLineBreaks)
+                {
+                    continue;
+                }
                 tokens.Add(token);
             } while (token.type != ETokenType.EOF);
             return tokens;
@@ -93,6 +97,35 @@ namespace CompilerLib
                     type = ETokenType.EOF;
                     break;
 
+                case '\n':
+                    type = ETokenType.LineBreak;
+                    length = 1;
+                    if (Peek(1) == '\r')
+                    {
+                        length++;
+                    }
+                    break;
+
+                case '-':
+                    type = ETokenType.Minus;
+                    length = 1;
+                    break;
+
+                case '+':
+                    type = ETokenType.Plus;
+                    length = 1;
+                    break;
+
+                case '*':
+                    type = ETokenType.Mult;
+                    length = 1;
+                    break;
+
+                case '/':
+                    type = ETokenType.Div;
+                    length = 1;
+                    break;
+
                 default:
                     type = ETokenType.Undefined;
                     throw new Exception($"Unexpected character '{ch}'.");
@@ -105,7 +138,6 @@ namespace CompilerLib
             }
             return new Token(type, new string(value));
         }
-
 
         Token NumberLiteral()
         {
@@ -124,7 +156,7 @@ namespace CompilerLib
             }
 
             string value = _source.Substring(start, _current - start);
-            return new Token(ETokenType.Integer, new string(value.ToArray()));
+            return new Token(ETokenType.Integer, value);
         }
     }
 }

@@ -5,11 +5,10 @@
         Undefined,
 
         EOF,
+        LineBreak,
 
-        Integer, Float, String,
+        Integer, Float, String, Identifier,
 
-        Identifier,
-
-
+        Minus, Plus, Mult, Div,
     }
 }
