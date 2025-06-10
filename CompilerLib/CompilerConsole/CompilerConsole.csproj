@@ -7,4 +7,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="text.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="text.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompilerLib\CompilerLib.csproj" />
+  </ItemGroup>
+
 </Project>

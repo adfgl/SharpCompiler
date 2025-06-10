@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompilerLib", "CompilerLib\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompilerTests", "CompilerTests\CompilerTests.csproj", "{48C48A16-18FF-4FD0-8105-1F35993C3D48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompilerConsole", "CompilerConsole\CompilerConsole.csproj", "{EFA7A00E-368D-40E0-B7E9-1DE681B74FC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{48C48A16-18FF-4FD0-8105-1F35993C3D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48C48A16-18FF-4FD0-8105-1F35993C3D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48C48A16-18FF-4FD0-8105-1F35993C3D48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA7A00E-368D-40E0-B7E9-1DE681B74FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA7A00E-368D-40E0-B7E9-1DE681B74FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA7A00E-368D-40E0-B7E9-1DE681B74FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA7A00E-368D-40E0-B7E9-1DE681B74FC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,6 +7,8 @@ namespace CompilerLib
     {
         const char NO_CHAR = '\0';
 
+        readonly StringBuffer m_buffer;
+
         readonly int _length;
         readonly string _source;
         int _current = 0;
@@ -15,6 +17,7 @@ namespace CompilerLib
 
         public TokenReader(string source)
         {
+            m_buffer = new StringBuffer(1024) { AllowResize = true };
             _source = source;
             _length = source.Length;
         }
@@ -40,6 +43,7 @@ namespace CompilerLib
 
         char Consume()
         {
+            _column++;
             return _source[_current++];
         }
 
@@ -91,7 +95,7 @@ namespace CompilerLib
 
             if (ch == '_' || IsLetter(ch))
             {
-
+                return IdentifierOrKeyword();
             }
 
             ETokenType type;
@@ -155,17 +159,41 @@ namespace CompilerLib
                     type = ETokenType.GreaterThan;
                     break;
 
+                case '(':
+                    type = ETokenType.OpenBracket;
+                    break;
+
+                case '[':
+                    type = ETokenType.OpenSquare;
+                    break;
+
+                case '{':
+                    type = ETokenType.OpenCurly;
+                    break;
+
+                case ')':
+                    type = ETokenType.CloseBracket;
+                    break;
+
+                case ']':
+                    type = ETokenType.CloseSquare;
+                    break;
+
+                case '}':
+                    type = ETokenType.CloseCurly;
+                    break;
+
                 default:
                     type = ETokenType.Undefined;
                     throw new Exception($"Unexpected character '{ch}'.");
             }
 
-            char[] value = new char[length];
+            m_buffer.Reset();
             for (int i = 0; i < length; i++)
             {
-                value[i] = Consume();
+                m_buffer.Push(Consume());
             }
-            return new Token(type, new string(value), line, column);
+            return new Token(type, m_buffer.ToString(), line, column);
         }
 
         Token IdentifierOrKeyword()
@@ -174,10 +202,21 @@ namespace CompilerLib
             int line = _line;
             int column = _column;
 
+            m_buffer.Reset();
             while (true)
             {
-
+                char ch = Peek();
+                if (IsLetter(ch) || IsDigit(ch) || ch == '_')
+                {
+                    m_buffer.Push(Consume());
+                }
+                else
+                {
+                    break;
+                }
             }
+            string value = m_buffer.ToString();
+            return new Token(ETokenType.Identifier, value, line, column);
         }
 
         Token Number()

@@ -41,9 +41,7 @@
 
         public override string ToString()
         {
-            string value = new string(s_buffer, 0, _count);
-            Reset();
-            return value;
+            return new string(s_buffer, 0, _count);
         }
 
         void Grow(int offset)
