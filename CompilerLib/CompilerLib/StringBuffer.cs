@@ -11,7 +11,6 @@
         }
 
         public bool AllowResize { get; set; } = true;
-
         public int Count => _count;
 
         public void Reset()
@@ -23,20 +22,6 @@
         {
             Grow(1);
             s_buffer[_count++] = ch;
-        }
-
-        public void Push(string str)
-        {
-            Grow(str.Length);
-            str.CopyTo(0, s_buffer, _count, str.Length);
-            _count += str.Length;
-        }
-
-        public ReadOnlySpan<char> ToSpan()
-        {
-            ReadOnlySpan<char> span = new ReadOnlySpan<char>(s_buffer, 0, _count);
-            Reset();
-            return span;
         }
 
         public override string ToString()
