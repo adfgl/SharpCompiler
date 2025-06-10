@@ -4,11 +4,14 @@
     {
         public readonly ETokenType type;
         public readonly string value;
+        public readonly int line, column;
 
-        public Token(ETokenType type, string value)
+        public Token(ETokenType type, string value, int line, int column)
         {
             this.type = type;
             this.value = value;
+            this.line = line;
+            this.column = column;
         }
 
         public int AsInteger()
@@ -22,7 +25,7 @@
 
         public override string ToString()
         {
-            return $"[{type}] {value}";
+            return $"(l{line} c{column}) [{type}] {value}";
         }
     }
 }

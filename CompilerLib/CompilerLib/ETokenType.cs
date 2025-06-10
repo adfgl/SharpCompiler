@@ -10,5 +10,8 @@
         Integer, Float, String, Identifier,
 
         Minus, Plus, Mult, Div,
+
+        Colon, SemiColon, Dot, Comma, Question, Exclamation,
+
     }
 }

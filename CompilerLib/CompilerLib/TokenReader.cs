@@ -10,6 +10,8 @@ namespace CompilerLib
         readonly int _length;
         readonly string _source;
         int _current = 0;
+        int _line = 0;
+        int _column = 0;
 
         public TokenReader(string source)
         {
@@ -51,8 +53,6 @@ namespace CompilerLib
             return _source[pos];
         }
 
-        Token s_prevToken = new Token(ETokenType.Undefined, String.Empty);
-
         public List<Token> ReadAll(bool ignoreLineBreaks = false)
         {
             List<Token> tokens = new List<Token>();
@@ -69,7 +69,7 @@ namespace CompilerLib
             return tokens;
         }
 
-        public Token Read() => s_prevToken = Next();
+        public Token Read() => Next();
 
         void SkipWhiteSpaces()
         {
@@ -90,40 +90,64 @@ namespace CompilerLib
             }
 
             ETokenType type;
-            int length = 0;
+            int length = 1;
+            int line = _line;
+            int column = _column;
             switch (ch)
             {
                 case NO_CHAR:
                     type = ETokenType.EOF;
+                    length = 0;
                     break;
 
                 case '\n':
                     type = ETokenType.LineBreak;
-                    length = 1;
                     if (Peek(1) == '\r')
                     {
                         length++;
                     }
+                    _column = 0;
+                    _line++;
                     break;
 
                 case '-':
                     type = ETokenType.Minus;
-                    length = 1;
                     break;
 
                 case '+':
                     type = ETokenType.Plus;
-                    length = 1;
                     break;
 
                 case '*':
                     type = ETokenType.Mult;
-                    length = 1;
                     break;
 
                 case '/':
                     type = ETokenType.Div;
-                    length = 1;
+                    break;
+
+                case ':':
+                    type = ETokenType.Colon;
+                    break;
+
+                case ';':
+                    type = ETokenType.SemiColon;
+                    break;
+
+                case '?':
+                    type = ETokenType.Question;
+                    break;
+
+                case '!':
+                    type = ETokenType.Exclamation;
+                    break;
+
+                case '<':
+                    type = ETokenType.LessThan;
+                    break;
+
+                case '>':
+                    type = ETokenType.GreaterThan;
                     break;
 
                 default:
@@ -136,12 +160,14 @@ namespace CompilerLib
             {
                 value[i] = Consume();
             }
-            return new Token(type, new string(value));
+            return new Token(type, new string(value), line, column);
         }
 
         Token NumberLiteral()
         {
             int start = _current;
+            int line = _line;
+            int column = _column;
             while (true)
             {
                 char ch = Peek();
@@ -156,7 +182,7 @@ namespace CompilerLib
             }
 
             string value = _source.Substring(start, _current - start);
-            return new Token(ETokenType.Integer, value);
+            return new Token(ETokenType.Integer, value, line, column);
         }
     }
 }
