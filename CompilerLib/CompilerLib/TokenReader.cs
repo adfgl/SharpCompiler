@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace CompilerLib
 {
@@ -43,12 +42,15 @@ namespace CompilerLib
 
         char Consume()
         {
-            _column++;
             char ch = _source[_current++];
-            if (IsWhiteSpace(ch))
+            if (IsLineBreak(ch))
             {
                 _column = 0;
                 _line++;
+            }
+            else
+            {
+                _column++;
             }
             return ch;
         }
@@ -99,9 +101,13 @@ namespace CompilerLib
                 return Number();
             }
 
-            if (ch == '_' || IsLetter(ch))
+            if (ch == '_')
             {
-                return IdentifierOrKeyword();
+                char peek = Peek(1);
+                if (IsDigit(peek) || IsLetter(peek) || peek == '_')
+                {
+                    return IdentifierOrKeyword();
+                }
             }
 
             ETokenType type;
@@ -189,6 +195,26 @@ namespace CompilerLib
 
                 case '}':
                     type = ETokenType.CloseCurly;
+                    break;
+
+                case '=':
+                    type = ETokenType.Equal;
+                    break;
+
+                case '~':
+                    type = ETokenType.Tilda;
+                    break;
+
+                case '_':
+                    type = ETokenType.Underscore;
+                    break;
+
+                case '@':
+                    type = ETokenType.AtSign;
+                    break;
+
+                case '\\':
+                    type = ETokenType.BackSlash;
                     break;
 
                 default:
