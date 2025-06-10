@@ -5,5 +5,9 @@
         Undefined,
 
         EOF,
+
+        Integer, Float, String,
+
+
     }
 }

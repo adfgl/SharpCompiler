@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Data.Common;
+using System.Runtime.CompilerServices;
 
 namespace CompilerLib
 {
@@ -69,6 +70,10 @@ namespace CompilerLib
         Token Next()
         {
             char ch = Peek();
+            if (IsDigit(ch))
+            {
+                return NumberLiteral();
+            }
 
             ETokenType type;
             int length = 0;
@@ -89,6 +94,27 @@ namespace CompilerLib
                 value[i] = Consume();
             }
             return new Token(type, new string(value));
+        }
+
+
+        Token NumberLiteral()
+        {
+            int start = _current;
+            while (true)
+            {
+                char ch = Peek();
+                if (IsDigit(ch))
+                {
+                    Consume();
+                }
+                else
+                {
+                    break;  
+                }
+            }
+
+            string value = _source.Substring(start, _current - start);
+            return new Token(ETokenType.Integer, new string(value.ToArray()));
         }
     }
 }
