@@ -44,7 +44,13 @@ namespace CompilerLib
         char Consume()
         {
             _column++;
-            return _source[_current++];
+            char ch = _source[_current++];
+            if (IsWhiteSpace(ch))
+            {
+                _column = 0;
+                _line++;
+            }
+            return ch;
         }
 
         char Peek(int offset = 0)
@@ -109,14 +115,16 @@ namespace CompilerLib
                     length = 0;
                     break;
 
+                case '\"':
+                    return String();
+
                 case '\n':
                     type = ETokenType.LineBreak;
                     if (Peek(1) == '\r')
                     {
                         length++;
                     }
-                    _column = 0;
-                    _line++;
+            
                     break;
 
                 case '-':
@@ -217,6 +225,31 @@ namespace CompilerLib
             }
             string value = m_buffer.ToString();
             return new Token(ETokenType.Identifier, value, line, column);
+        }
+
+        Token String()
+        {
+            int start = _current;
+            int line = _line;
+            int column = _column;
+
+            char ch = Consume();
+            if (ch != '\"')
+            {
+                throw new Exception();
+            }
+
+            m_buffer.Reset();
+            while (true)
+            {
+                if (Peek() == '\"')
+                {
+                    Consume();
+                    break;
+                }
+                m_buffer.Push(Consume());
+            }
+            return new Token(ETokenType.String, m_buffer.ToString(), line, column);
         }
 
         Token Number()
