@@ -86,7 +86,12 @@ namespace CompilerLib
             char ch = Peek();
             if (IsDigit(ch))
             {
-                return NumberLiteral();
+                return Number();
+            }
+
+            if (ch == '_' || IsLetter(ch))
+            {
+
             }
 
             ETokenType type;
@@ -163,7 +168,19 @@ namespace CompilerLib
             return new Token(type, new string(value), line, column);
         }
 
-        Token NumberLiteral()
+        Token IdentifierOrKeyword()
+        {
+            int start = _current;
+            int line = _line;
+            int column = _column;
+
+            while (true)
+            {
+
+            }
+        }
+
+        Token Number()
         {
             int start = _current;
             int line = _line;
